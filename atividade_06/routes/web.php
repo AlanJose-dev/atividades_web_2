@@ -6,11 +6,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+\Illuminate\Support\Facades\Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
@@ -22,7 +20,12 @@ Route::post('/books/create-id-number', [\App\Http\Controllers\BookController::cl
 Route::get('/books/create-select', [\App\Http\Controllers\BookController::class, 'createWithSelect'])->name('books.create.select');
 Route::post('/books/create-select', [\App\Http\Controllers\BookController::class, 'storeWithSelect'])->name('books.store.select');
 
-// Rotas RESTful para index, show, edit, update, delete (tem que ficar depois das rotas /books/create-id-number e /books/create-select)
 Route::resource('books', \App\Http\Controllers\BookController::class)->except(['create', 'store']);
 
 Route::resource('users', \App\Http\Controllers\UserController::class)->except(['create', 'store', 'destroy']);
+
+Route::post('/books/{book}/borrow', [\App\Http\Controllers\BorrowingController::class, 'store'])->name('books.borrow');
+
+Route::get('/users/{user}/borrowings', [\App\Http\Controllers\BorrowingController::class, 'userBorrowings'])->name('users.borrowings');
+
+Route::patch('/borrowings/{borrowing}/return', [\App\Http\Controllers\BorrowingController::class, 'returnBook'])->name('borrowings.return');
