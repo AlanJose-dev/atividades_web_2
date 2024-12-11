@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Publisher;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
@@ -26,12 +27,21 @@ class BookController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
+            'cover' => 'image|max:3024|nullable', //3MB
             'publisher_id' => 'required|exists:publishers,id',
             'author_id' => 'required|exists:authors,id',
             'category_id' => 'required|exists:categories,id',
         ]);
 
-        Book::create($request->all());
+        $coverPath = $request->file('cover')?->store('covers', 'public') ?? null;
+        $book = Book::make($request->only([
+            'title',
+            'publisher_id',
+            'author_id',
+            'category_id',
+        ]));
+        $book->cover = $coverPath;
+        $book->save();
 
         return redirect()->route('books.index')->with('success', 'Livro criado com sucesso.');
     }
@@ -49,12 +59,21 @@ class BookController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
+            'cover' => 'image|max:3024|nullable', //3MB
             'publisher_id' => 'required|exists:publishers,id',
             'author_id' => 'required|exists:authors,id',
             'category_id' => 'required|exists:categories,id',
         ]);
 
-        Book::create($request->all());
+        $coverPath = $request->file('cover')?->store('covers', 'public') ?? null;
+        $book = Book::make($request->only([
+            'title',
+            'publisher_id',
+            'author_id',
+            'category_id',
+        ]));
+        $book->cover = $coverPath;
+        $book->save();
 
         return redirect()->route('books.index')->with('success', 'Livro criado com sucesso.');
     }
@@ -75,7 +94,7 @@ class BookController extends Controller
 
         $users = User::all();
 
-        return view('books.show', compact('book','users'));
+        return view('books.show', compact('book', 'users'));
     }
 
 
@@ -83,13 +102,30 @@ class BookController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
+            'cover' => 'image|max:3024|nullable', //3MB
             'publisher_id' => 'required|exists:publishers,id',
             'author_id' => 'required|exists:authors,id',
             'category_id' => 'required|exists:categories,id',
         ]);
 
-        $book->update($request->all());
+        $coverPath = $request->file('cover')?->store('covers', 'public') ?? null;
+        $book->cover = $coverPath;
+        $book->update($request->only([
+            'title',
+            'publisher_id',
+            'author_id',
+            'category_id',
+        ]));
 
         return redirect()->route('books.index')->with('success', 'Livro atualizado com sucesso.');
+    }
+
+    public function destroy(Book $book)
+    {
+        if(Storage::disk('public')->fileExists($book->cover))
+            Storage::disk('public')->delete($book->cover);
+
+        $book->delete();
+        return redirect()->route('books.index')->with('success', 'Livro apagado com sucesso.');
     }
 }

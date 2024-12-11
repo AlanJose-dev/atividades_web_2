@@ -1,3 +1,9 @@
+<h1 class="h1">{{$book->title}}</h1>
+
+<div class="container">
+    <img src="{{!is_null($book->cover) ? asset('storage/' . $book->cover) : asset('storage/covers/' . 'blank_book.jpg')}}" class="img-thumbnail" style="width: 300px;"/>
+</div>
+
 <!-- Formulário para Empréstimos -->
 <div class="card mb-4">
     <div class="card-header">Registrar Empréstimo</div>

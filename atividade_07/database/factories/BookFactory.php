@@ -21,6 +21,7 @@ class BookFactory extends Factory
     {
         return [
             'title' => $this->faker->sentence(),
+            'cover' => random_int(0, 1) === 1 ? 'covers/test_book.jpg' : null,
             'author_id' => Author::factory(),
             'category_id' => Category::factory(),
             'publisher_id' => Publisher::factory(),
