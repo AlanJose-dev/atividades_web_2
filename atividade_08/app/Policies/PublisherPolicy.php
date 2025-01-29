@@ -24,8 +24,7 @@ class PublisherPolicy
      */
     public function view(User $user, Publisher $publisher): bool
     {
-        return in_array($user->role, collect(UserRolesEnum::cases())
-            ->pluck('value')->toArray());
+        return true;
     }
 
     /**

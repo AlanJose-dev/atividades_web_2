@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Author;
 use App\Models\Book;
 use App\Models\Category;
 use App\Models\Publisher;
+use App\Policies\AuthorPolicy;
 use App\Policies\BookPolicy;
 use App\Policies\CategoryPolicy;
 use App\Policies\PublisherPolicy;
@@ -29,5 +31,6 @@ class GateAuthorizationServiceProvider extends ServiceProvider
         Gate::policy(Book::class, BookPolicy::class);
         Gate::policy(Publisher::class, PublisherPolicy::class);
         Gate::policy(Category::class, CategoryPolicy::class);
+        Gate::policy(Author::class, AuthorPolicy::class);
     }
 }

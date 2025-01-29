@@ -3,11 +3,11 @@
 namespace App\Policies;
 
 use App\Enums\UserRolesEnum;
-use App\Models\Book;
+use App\Models\Author;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class BookPolicy
+class AuthorPolicy
 {
     private static string $denyMessage = 'Você não pode realizar esta ação';
 
@@ -22,7 +22,7 @@ class BookPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Book $book): Response
+    public function view(User $user, Author $author): Response
     {
         return Response::allow();
     }
@@ -39,7 +39,7 @@ class BookPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Book $book): Response
+    public function update(User $user, Author $author): Response
     {
         return $this->create($user);
     }
@@ -47,7 +47,7 @@ class BookPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Book $book): Response
+    public function delete(User $user, Author $author): Response
     {
         return $this->create($user);
     }
@@ -55,7 +55,7 @@ class BookPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Book $book): Response
+    public function restore(User $user, Author $author): Response
     {
         return $this->create($user);
     }
@@ -63,7 +63,7 @@ class BookPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Book $book): Response
+    public function forceDelete(User $user, Author $author): Response
     {
         return $this->create($user);
     }

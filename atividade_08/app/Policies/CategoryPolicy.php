@@ -9,13 +9,14 @@ use Illuminate\Auth\Access\Response;
 
 class CategoryPolicy
 {
+    private static string $denyMessage = 'Você não pode realizar esta ação';
+
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(User $user): Response
     {
-        return in_array($user->role, collect(UserRolesEnum::cases())
-            ->pluck('value')->toArray());
+        return Response::allow();
     }
 
     /**
@@ -23,8 +24,7 @@ class CategoryPolicy
      */
     public function view(User $user, Category $category): Response
     {
-        return in_array($user->role, [UserRolesEnum::ADMIN, UserRolesEnum::LIBRARIAN])
-            ? Response::allow() : Response::deny(self::$denyMessage);
+        return Response::allow();
     }
 
     /**
@@ -32,7 +32,8 @@ class CategoryPolicy
      */
     public function create(User $user): Response
     {
-        return $this->create($user);
+        return in_array($user->role, [UserRolesEnum::ADMIN, UserRolesEnum::LIBRARIAN])
+        ? Response::allow() : Response::deny(self::$denyMessage);
     }
 
     /**
