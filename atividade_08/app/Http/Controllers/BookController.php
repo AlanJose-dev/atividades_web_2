@@ -20,11 +20,13 @@ class BookController extends Controller
 
     public function createWithId()
     {
+        $this->authorize('create', Book::class);
         return view('books.create-id');
     }
 
     public function storeWithId(Request $request)
     {
+        $this->authorize('create', Book::class);
         $request->validate([
             'title' => 'required|string|max:255',
             'cover' => 'image|max:3024|nullable', //3MB
@@ -48,6 +50,7 @@ class BookController extends Controller
 
     public function createWithSelect()
     {
+        $this->authorize('create', Book::class);
         $publishers = Publisher::all();
         $authors = Author::all();
         $categories = Category::all();
@@ -57,6 +60,7 @@ class BookController extends Controller
 
     public function storeWithSelect(Request $request)
     {
+        $this->authorize('create', Book::class);
         $request->validate([
             'title' => 'required|string|max:255',
             'cover' => 'image|max:3024|nullable', //3MB
@@ -80,6 +84,7 @@ class BookController extends Controller
 
     public function edit(Book $book)
     {
+        $this->authorize('view', $book);
         $publishers = Publisher::all();
         $authors = Author::all();
         $categories = Category::all();
@@ -89,6 +94,7 @@ class BookController extends Controller
 
     public function show(Book $book)
     {
+        $this->authorize('view', $book);
         // Carregando autor, editora e categoria do livro com eager loading
         $book->load(['author', 'publisher', 'category']);
 
@@ -100,6 +106,7 @@ class BookController extends Controller
 
     public function update(Request $request, Book $book)
     {
+        $this->authorize('update', $book);
         $request->validate([
             'title' => 'required|string|max:255',
             'cover' => 'image|max:3024|nullable', //3MB
@@ -122,6 +129,7 @@ class BookController extends Controller
 
     public function destroy(Book $book)
     {
+        $this->authorize('delete', $book);
         if(Storage::disk('public')->fileExists($book->cover))
             Storage::disk('public')->delete($book->cover);
 
