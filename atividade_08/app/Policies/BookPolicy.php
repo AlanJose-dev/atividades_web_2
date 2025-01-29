@@ -32,8 +32,13 @@ class BookPolicy
      */
     public function create(User $user): Response
     {
-        return in_array($user->role, [UserRolesEnum::ADMIN, UserRolesEnum::LIBRARIAN])
+        return in_array($user->role, [UserRolesEnum::ADMIN->value, UserRolesEnum::LIBRARIAN->value])
             ? Response::allow() : Response::deny(self::$denyMessage);
+    }
+
+    public function edit(User $user, Book $book): Response
+    {
+        return $this->create($user);
     }
 
     /**

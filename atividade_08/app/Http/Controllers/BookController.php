@@ -130,7 +130,7 @@ class BookController extends Controller
     public function destroy(Book $book)
     {
         $this->authorize('delete', $book);
-        if(Storage::disk('public')->fileExists($book->cover))
+        if(!is_null($book->cover) && Storage::disk('public')->fileExists($book->cover))
             Storage::disk('public')->delete($book->cover);
 
         $book->delete();

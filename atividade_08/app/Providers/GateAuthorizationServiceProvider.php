@@ -36,7 +36,7 @@ class GateAuthorizationServiceProvider extends ServiceProvider
         Gate::policy(Category::class, CategoryPolicy::class);
         Gate::policy(Author::class, AuthorPolicy::class);
         Gate::define('edit_users_roles', function (User $user) {
-            return $user->role === UserRolesEnum::ADMIN ? Response::allow() :
+            return $user->role === UserRolesEnum::ADMIN->value ? Response::allow() :
                 Response::deny('Você não pode realizar esta ação');
         });
     }
